@@ -1,11 +1,21 @@
-function main () {
-    fetch('https://handlers.education.launchcode.org/static/astronauts.json')
-    .then((response)=>{
-        response.json()
-        .then((json)=>{
-            let container = document.getElementById('container'); 
-            let astronautListElements = ''
-            json.forEach((astronaut) => {
+async function main () {
+
+    let response = await fetch('https://handlers.education.launchcode.org/static/astronauts.json'); 
+    let json = await response.json();
+
+    json = json.sort((a, b) => a.hoursInSpace - b.hoursInSpace); 
+
+    let container = document.getElementById('container'); 
+
+    let astronautListElements = ''
+
+
+        json.forEach((astronaut) => {
+
+            let isActiveHtml = astronaut.active
+            if(astronaut.active === true) {
+              isActiveHtml = `<span class="active">${astronaut.active}</span>`
+            }
                 astronautListElements += `
                 <div class="astronaut">
                      <div class="bio">
@@ -20,10 +30,8 @@ function main () {
                 </div>
             `
             container.innerHTML = astronautListElements; 
-            })
-        })
-    })
+            }); 
+        }; 
 
-}
 
 window.addEventListener("load", main); 
